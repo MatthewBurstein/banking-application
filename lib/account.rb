@@ -1,13 +1,15 @@
+require 'CSV'
+
 class Account
-  attr_reader :account_number, :account_holder
+  attr_reader :number, :holder
   attr_accessor :balance
   @@global_account_number = 0
 
   def initialize(account_holder, balance = 0)
-    @@global_account_number += 1
-    @account_number = @@global_account_number
     @balance = balance
-    @account_holder = account_holder
+    @holder = account_holder
+    @@global_account_number += 1
+    @number = @@global_account_number
   end
 
   def deposit(amount)
@@ -34,6 +36,14 @@ class Account
   end
 
   def close
+    csv_dir = "#{File.dirname(__FILE__)}/../storage/accounts.csv"
+    table = CSV.table(csv_dir)
+    puts "table is #{table}"
+    table.delete_if { |row| row[1] = @holder}
+    puts "now table is #{table}"
+    File.open(csv_dir, 'w') do |f|
+      f.write(table.to_csv)
+    end
     final_balance = @balance
     @balance = 0
     puts "Your account has been closed."

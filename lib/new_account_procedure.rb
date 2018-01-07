@@ -14,7 +14,13 @@ else
   amount = 0
 end
 
-new_account = Account.new(username, amount)
+if amount > 0
+  account = Account.new(username, amount)
+else
+  account = Account.new(username)
+end
+
+temp_storage = [account.number,account.holder,account.balance]
 
 CSV.open("#{File.dirname(__FILE__)}/../storage/accounts.csv", "ab") do |csv|
   csv << temp_storage
