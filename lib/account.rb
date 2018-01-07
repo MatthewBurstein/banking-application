@@ -17,18 +17,27 @@ class Account
       @balance += amount
       puts "Your balance is now: #{@balance}"
     end
+    @balance
   end
 
   def withdraw(amount)
     if amount <= 0
       puts "Amount must be greater than zero"
+    elsif amount > @balance
+      puts "You do not have enough funds to withdraw this much"
+      puts "Your balance is #{@balance}."
     else
       @balance -= amount
       puts "Your balance is now #{@balance}"
     end
+    @balance
   end
 
   def close
+    final_balance = @balance
+    @balance = 0
+    puts "Your account has been closed."
+    final_balance
   end
 
 end
