@@ -66,7 +66,7 @@ describe Account do
         end
 
         it "should not remove other rows from csv" do
-          expect(CSV.read(accounts_spec_csv).flatten).to include(account.holder)
+          expect(CSV.read(accounts_spec_csv).flatten).to include('alice', 'bob')
         end
       end
     end
