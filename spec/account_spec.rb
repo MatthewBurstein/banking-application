@@ -61,12 +61,22 @@ describe Account do
           expect(account.balance).to eq(0)
         end
 
-        it "should remove row from csv" do
+        it "should remove row from csv (check by name)" do
           expect(CSV.read(accounts_spec_csv).flatten).not_to include(account.holder)
+        end
+
+        it "should remove row from csv (check by balance)" do
+          expect(CSV.read(accounts_spec_csv).flatten).not_to include(account.balance)
         end
 
         it "should not remove other rows from csv" do
           expect(CSV.read(accounts_spec_csv).flatten).to include('alice', 'bob')
+        end
+
+        after do
+          CSV.open(accounts_spec_csv,'ab') do |csv|
+            csv << [3,'holder',60]
+          end
         end
       end
     end
