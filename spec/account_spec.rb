@@ -1,4 +1,5 @@
 require 'rspec'
+require 'CSV' unless defined?(CSV)
 require_relative '../lib/account'
 
 describe Account do
@@ -13,7 +14,7 @@ describe Account do
 
   context "Once account has been created" do
   #  before do
-      let(:account) {Account.new("holder", 100)}
+      let!(:account) {Account.new("holder", 100)}
   #  end
 
     describe "deposit" do
@@ -44,18 +45,28 @@ describe Account do
     describe "close" do
 
       let!(:final_balance) {account.balance}
+      let(:accounts_csv) { "#{File.dirname(__FILE__)}/../storage/accounts.csv"}
+      let(:accounts_spec_csv) { "#{File.dirname(__FILE__)}/../spec/spec_storage/accounts_spec.csv"}
 
       it "should return final balance amount" do
-        expect(account.close).to eq(final_balance)
+        expect(account.close(accounts_csv)).to eq(final_balance)
       end
 
       context "once account is closed" do
         before do
-          account.close
+          account.close(accounts_spec_csv)
         end
 
         it "should set balance to 0" do
           expect(account.balance).to eq(0)
+        end
+
+        it "should remove row from csv" do
+          expect(CSV.read(accounts_spec_csv).flatten).not_to include(account.holder)
+        end
+
+        it "should not remove other rows from csv" do
+          expect(CSV.read(accounts_spec_csv).flatten).to include(account.holder)
         end
       end
     end

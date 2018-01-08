@@ -22,6 +22,6 @@ end
 
 temp_storage = [account.number,account.holder,account.balance]
 
-CSV.open("#{File.dirname(__FILE__)}/../storage/accounts.csv", "ab") do |csv|
+CSV.open("#{File.dirname(__FILE__)}/../storage/accounts.csv", "ab", headers: true) do |csv|
   csv << temp_storage
 end

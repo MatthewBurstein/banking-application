@@ -35,12 +35,11 @@ class Account
     @balance
   end
 
-  def close
-    csv_dir = "#{File.dirname(__FILE__)}/../storage/accounts.csv"
-    table = CSV.table(csv_dir)
-    puts "table is #{table}"
-    table.delete_if { |row| row[1] = @holder}
-    puts "now table is #{table}"
+  def close(csv_dir)
+    table = CSV.table(csv_dir,{headers: true})
+    table.delete_if do |row|
+      row[:account_holder] == @holder
+    end
     File.open(csv_dir, 'w') do |f|
       f.write(table.to_csv)
     end
