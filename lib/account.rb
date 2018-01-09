@@ -1,4 +1,4 @@
-require 'CSV'
+require 'csv'
 
 class Account
   attr_reader :number, :holder

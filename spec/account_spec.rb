@@ -1,5 +1,5 @@
 require 'rspec'
-require 'CSV' unless defined?(CSV)
+require 'csv' unless defined?(CSV)
 require_relative '../lib/account'
 
 describe Account do
