@@ -3,46 +3,57 @@ require 'csv'
 puts "Hello! This wizard will create a new Customer - that's you!"
 puts "----------------------------".center(50)
 
-duplicate = true
+user_storage = []
 
-while duplicate do
+# Ask for, validate and store username
+
+loop do
   puts "Please choose a username (case insensitve)"
   username = gets.chomp.downcase
-
-  CSV.foreach("#{File.dirname(__FILE__)}/../storage/customers.csv") do |row|
-    if row[0] = username
-      duplicate = false
-    end
+  duplicate = false
+  CSV.foreach("#{File.dirname(__FILE__)}/../storage/customers.csv", {headers: true}) do |row|
+    duplicate = true if row[0] == username
   end
-  puts "Sorry that username is already taken. Please try another" if duplicate
+  if duplicate
+    puts "Sorry that username is already taken. Please try another"
+  else
+    user_storage << username
+    break
+  end
 end
 
-temp_storage = [username]
-
-puts temp_storage
 puts "Success!"
+sleep(1)
+
+# Ask for, validate and store password
 
 validated = false
+password_match = false
 
-while !validated do
-  puts "Please enter a password. Passwords must be at least 8 characters long and include uppercase, lowercase and numeral characters"
-  password1 = gets.chomp
+while !password_match
+  while !validated do
+    puts "Please enter a password. Passwords must be at least 8 characters long and include uppercase, lowercase and numeral characters"
+    password1 = gets.chomp
+    if password1[/[A-Z]/] != nil && password1[/[a-z]/] != nil && password1[/[\d]/] != nil
+      validated = true
+    else
+      puts "Password invalid \n\n"
+    end
+  end
 
-  puts "Please re-enter your password to confirm. Passwords must be at least 8 characters long and include uppercase, lowercase and numeral characters"
+  puts "Please confirm your password."
   password2 = gets.chomp
-
-  if password1==password2 &&
-    password1.match(/([A-Za-z\d]+)/) != nil &&
-    true # need to add confirmation that password contains at least one character from uppercase, lowercase and digit
-    validated = true
-    temp_storage << password1
+  if password1==password2
+      password_match = true
+      user_storage << password1.crypt(user_storage[0])
   else
-    puts "Password invalid \n\n"
+    validated = false
+    puts "Passwords do not match \n\n"
   end
 end
 
 puts "Success! Thank you for registering. Your account has been created."
-
+# Add customer to customers.csv
 CSV.open("#{File.dirname(__FILE__)}/../storage/customers.csv", "ab") do |csv|
-  csv << temp_storage
+  csv << user_storage
 end

@@ -35,6 +35,9 @@ class Account
     @balance
   end
 
+  def write_to_database
+  end
+
   def close(csv_dir)
     table = CSV.table(csv_dir,{headers: true})
     table.delete_if do |row|
