@@ -1,4 +1,6 @@
 require 'csv'
+require_relative 'customer.rb'
+require_relative 'account.rb'
 
 login = false
 

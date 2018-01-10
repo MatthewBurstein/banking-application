@@ -1,7 +1,6 @@
 require 'csv'
 
 puts "Hello! This wizard will create a new Customer - that's you!"
-puts "----------------------------".center(50)
 
 user_storage = []
 
