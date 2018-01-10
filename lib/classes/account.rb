@@ -1,15 +1,13 @@
-require 'csv'
-
 class Account
   attr_reader :number, :holder
   attr_accessor :balance
   @@global_account_number = 0
 
-  def initialize(account_holder, balance = 0)
-    @balance = balance
+  def initialize(account_holder, number = @@global_account_number, balance = 0)
     @holder = account_holder
+    @number = number
+    @balance = balance
     @@global_account_number += 1
-    @number = @@global_account_number
   end
 
   def deposit(amount)

@@ -1,8 +1,8 @@
 class Customer
-  attr_accessor :accounts
+  attr_accessor :name, :accounts
 
   def initialize(username)
-    @username = username
+    @name = username
     @accounts = []
   end
 
